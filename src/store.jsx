@@ -59,6 +59,7 @@ export function usePokemonContext() {
   return useContext(PokemonContext);
 }
 
+// Pokemon Provider
 export function PokemonProvider({ children }) {
   return (
     <PokemonContext.Provider value={useFetchPokemon()}>
