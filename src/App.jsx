@@ -1,14 +1,13 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
 import { PokemonProvider, usePokemonContext } from "./store";
+
+const queryClient = new QueryClient();
 
 function SearchBox() {
   const { search, setSearch } = usePokemonContext();
 
-  return (
-    <input 
-      value={search}
-      onChange={e => setSearch(e.target.value)}
-    />
-  )
+  return <input value={search} onChange={(e) => setSearch(e.target.value)} />;
 }
 
 function PokemonList() {
@@ -25,10 +24,12 @@ function PokemonList() {
 
 function App() {
   return (
-    <PokemonProvider>
-      <SearchBox />
-      <PokemonList />
-    </PokemonProvider>
+    <QueryClientProvider client={queryClient}>
+      <PokemonProvider>
+        <SearchBox />
+        <PokemonList />
+      </PokemonProvider>
+    </QueryClientProvider>
   );
 }
 

@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query";
 import {
   useEffect,
   createContext,
@@ -12,26 +13,25 @@ const PokemonContext = createContext({
 });
 
 function useFetchPokemon() {
-  const [{ pokemon, search }, dispatch] = useReducer(
+  const [{ search }, dispatch] = useReducer(
     (state, action) => {
       switch (action.type) {
-        case "setPokemon":
-          return { ...state, pokemon: action.payload };
         case "setSearch":
           return { ...state, search: action.payload };
       }
     },
     {
-      pokemon: [],
       search: "",
     }
   );
 
-  useEffect(() => {
-    fetch("/pokemon.json")
-      .then((res) => res.json())
-      .then((data) => dispatch({ type: "setPokemon", payload: data }));
-  }, []);
+  const { data: pokemon } = useQuery(
+    ["pokemon"],
+    () => fetch("/pokemon.json").then((res) => res.json()),
+    {
+      initialData: [],
+    }
+  );
 
   // set search
   const setSearch = useCallback((searchText) => {
